@@ -79,7 +79,7 @@ void oled_task(void *p) {
     gfx_init(&disp, 128, 32);
 
     printf("Inicializando btn and LEDs\n");
-    char cnt = 15;
+    char cnt;
     while (1) {
 
         int dist = 0;
