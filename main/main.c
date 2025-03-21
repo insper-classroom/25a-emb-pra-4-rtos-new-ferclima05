@@ -31,10 +31,10 @@ SemaphoreHandle_t xSemaphore_e;
 void pin_callback(uint gpio, uint32_t events) {
     if (events == 0x8) {
         absolute_time_t echo_init = get_absolute_time();
-        xQueueSend(xQueueButId, &echo_init, pdMS_TO_TICKS(10));
+        xQueueSendFromISR(xQueueButId, &echo_init, pdMS_TO_TICKS(10));
     } else if (events == 0x4) {
         absolute_time_t echo_end = get_absolute_time();
-        xQueueSend(xQueueButId, &echo_end, pdMS_TO_TICKS(10));
+        xQueueSendFromISR(xQueueButId, &echo_end, pdMS_TO_TICKS(10));
     }
 }
 
