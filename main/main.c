@@ -85,28 +85,28 @@ void oled_task(void *p) {
         int dist = 0;
 
             // gfx_draw_string(&disp, 0, 10, 1, dist);
-        // if (xSemaphoreTake(xSemaphore_e, pdMS_TO_TICKS(500)) == pdTRUE) {
-        if (xQueueReceive(xQueueButId_d, &dist, pdMS_TO_TICKS(50))) {
-            gfx_clear_buffer(&disp);
-            gfx_draw_string(&disp, 0, 0, 1, "DISTANCIA:");
+        if (xSemaphoreTake(xSemaphore_e, pdMS_TO_TICKS(500)) == pdTRUE) {
+            if (xQueueReceive(xQueueButId_d, &dist, pdMS_TO_TICKS(50))) {
+                gfx_clear_buffer(&disp);
+                gfx_draw_string(&disp, 0, 0, 1, "DISTANCIA:");
 
-            if ((dist < 2)||(dist > 400)){
-                gfx_draw_string(&disp, 0, 10, 1, "Falha");
+                if ((dist < 2)||(dist > 400)){
+                    gfx_draw_string(&disp, 0, 10, 1, "Falha");
+                } else {
+                    char dist_str[10];                          // Assuming a reasonable length for the integer to string conversion
+                    sprintf(dist_str, "%d", dist);              // Convert int to string
+                    gfx_draw_string(&disp, 0, 10, 1, dist_str); // Draw the string representation
+
+                    cnt = dist*112/75;
+                    gfx_draw_line(&disp, 15, 27, cnt, 27);
+                    vTaskDelay(pdMS_TO_TICKS(50));
+                }
             } else {
-                char dist_str[10];                          // Assuming a reasonable length for the integer to string conversion
-                sprintf(dist_str, "%d", dist);              // Convert int to string
-                gfx_draw_string(&disp, 0, 10, 1, dist_str); // Draw the string representation
-
-                cnt = dist*112/75;
-                gfx_draw_line(&disp, 15, 27, cnt, 27);
-                vTaskDelay(pdMS_TO_TICKS(50));
+                gfx_clear_buffer(&disp);
+                gfx_draw_string(&disp, 0, 10, 1, "Falha");
             }
-        } else {
-            gfx_clear_buffer(&disp);
-            gfx_draw_string(&disp, 0, 10, 1, "Falha");
-        }
         gfx_show(&disp);
-        //}
+        }
     }
 }
 
