@@ -84,8 +84,9 @@ void oled_task(void *p) {
 
         int dist = 0;
 
+            // gfx_draw_string(&disp, 0, 10, 1, dist);
         // if (xSemaphoreTake(xSemaphore_e, pdMS_TO_TICKS(500)) == pdTRUE) {
-        if (xQueueReceive(xQueueButId_d, &dist, pdMS_TO_TICKS(10))) {
+        if (xQueueReceive(xQueueButId_d, &dist, pdMS_TO_TICKS(50))) {
             gfx_clear_buffer(&disp);
             gfx_draw_string(&disp, 0, 0, 1, "DISTANCIA:");
 
@@ -96,16 +97,13 @@ void oled_task(void *p) {
                 sprintf(dist_str, "%d", dist);              // Convert int to string
                 gfx_draw_string(&disp, 0, 10, 1, dist_str); // Draw the string representation
 
-                cnt = dist*112/50;
+                cnt = dist*112/75;
                 gfx_draw_line(&disp, 15, 27, cnt, 27);
                 vTaskDelay(pdMS_TO_TICKS(50));
-                //if (cnt == 112) {
-                //    cnt = 15;
-                //}
             }
-
-
-            // gfx_draw_string(&disp, 0, 10, 1, dist);
+        } else {
+            gfx_clear_buffer(&disp);
+            gfx_draw_string(&disp, 0, 10, 1, "Falha");
         }
         gfx_show(&disp);
         //}
